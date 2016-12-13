@@ -8,4 +8,7 @@ class Rating < ApplicationRecord
   validates :exercise_class_attribute,
     presence: true,
     uniqueness: { scope: [:user_id, :exercise_class_id] }
+
+  delegate :name, to: :exercise_class_attribute, prefix: true
+  delegate :name, to: :user, prefix: true
 end
