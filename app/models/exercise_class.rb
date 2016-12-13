@@ -7,6 +7,8 @@ class ExerciseClass < ApplicationRecord
   validates :category, presence: true
   validates :name, presence: true, uniqueness: { scope: [:studio] }
 
+  update_index('exercise_classes') { self }
+
   def self.search(term: "")
     # TODO use elasticsearch
     if term.present?
