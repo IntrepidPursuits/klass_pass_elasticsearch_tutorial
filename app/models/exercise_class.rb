@@ -10,11 +10,28 @@ class ExerciseClass < ApplicationRecord
   update_index('exercise_classes') { self }
 
   def self.search(term: "")
-    # TODO use elasticsearch
     if term.present?
-      where("name ILIKE ?", "%#{term}%")
+      query = {
+        query: {
+          match: {
+            name: term
+          }
+        }
+      }
     else
-      all
+      query = {
+        query: {
+          match_all: {}
+        }
+      }
     end
+
+    # returns an `ExerciseClassIndex::Query` object
+    results = ExerciseClassesIndex.query(query)
+    # pull out the class attributes
+    class_attributes = results.to_a.map(&:attributes)
+    # fetch the classes with the right IDs from the database
+    class_ids = class_attributes.map { |attrs| attrs['id'] }
+    find(class_ids)
   end
 end
