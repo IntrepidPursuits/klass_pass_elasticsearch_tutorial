@@ -10,7 +10,7 @@ class ExerciseClass < ApplicationRecord
   def self.search(term: "")
     # TODO use elasticsearch
     if term.present?
-      where("name ILIKE '%?%'", term)
+      where("name ILIKE ?", "%#{term}%")
     else
       all
     end
