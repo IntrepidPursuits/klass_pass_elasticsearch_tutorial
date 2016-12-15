@@ -12,9 +12,8 @@ class ExerciseClassesIndex < Chewy::Index
     field :updated_at, type: 'date', index: 'not_analyzed'
 
     # computed
-    field :average_score, type: 'number', value: ->(exercise_class) do
-      ratings = exercise_class.ratings
-      ratings.sum(:score) / ratings.count
+    field :average_score, type: 'float', value: ->(exercise_class) do
+      exercise_class.average_score
     end
   end
 end

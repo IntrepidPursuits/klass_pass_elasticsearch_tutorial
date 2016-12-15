@@ -12,16 +12,20 @@ class ExerciseClass < ApplicationRecord
   def self.search(term: "")
     if term.present?
       query = {
-        query: {
-          match: {
-            name: term
-          }
+        query: [
+          { match: { name: term } }
+        ],
+        sort: {
+          average_score: { order: 'desc' }
         }
       }
     else
       query = {
-        query: {
-          match_all: {}
+        query: [
+          { match_all: {} }
+        ],
+        sort: {
+          average_score: { order: 'desc' }
         }
       }
     end
@@ -33,5 +37,9 @@ class ExerciseClass < ApplicationRecord
     # fetch the classes with the right IDs from the database
     class_ids = class_attributes.map { |attrs| attrs['id'] }
     find(class_ids)
+  end
+
+  def average_score
+    ratings.sum(:score).to_f / ratings.count
   end
 end

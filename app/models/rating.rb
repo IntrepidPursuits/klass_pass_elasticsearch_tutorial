@@ -11,4 +11,6 @@ class Rating < ApplicationRecord
 
   delegate :name, to: :exercise_class_attribute, prefix: true
   delegate :name, to: :user, prefix: true
+
+  update_index('exercise_classes') { exercise_class }
 end
